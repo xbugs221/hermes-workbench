@@ -1,0 +1,19 @@
+/** 文件目的：仅为 sidecar 加载与失败状态提供可读布局，不承载工作台主题。 */
+.workbench-sidecar-status {
+  display: grid;
+  min-height: 50vh;
+  place-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--foreground);
+  background: var(--background);
+  text-align: center;
+}
+
+.workbench-sidecar-status button {
+  border: 1px solid currentColor;
+  padding: 0.5rem 0.75rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}

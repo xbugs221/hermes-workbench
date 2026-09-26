@@ -1,0 +1,52 @@
+/* In-page reader shared by native Files and Kanban task attachments. */
+.hti-kanban-attachment-preview-button {
+  flex: 0 0 auto;
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: .28rem;
+  padding: .15rem .38rem;
+  color: var(--color-primary, #2563eb);
+  background: var(--color-card, #fff);
+  cursor: pointer;
+  font-size: .72rem;
+}
+button[data-hti-files-preview="true"] { cursor: zoom-in; }
+button[data-hti-files-preview="true"] span.truncate { text-decoration: underline dotted; text-underline-offset: .22rem; }
+button[data-hti-files-preview="true"][aria-busy="true"] { opacity: .65; cursor: progress; }
+.hti-file-preview {
+  position: fixed;
+  z-index: 2147483647;
+  display: block;
+  inset: 0;
+  padding: 0;
+  background: color-mix(in srgb, #000 55%, transparent);
+}
+.hti-file-preview-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100dvh;
+  max-height: none;
+  border: 0;
+  border-radius: 0;
+  color: var(--color-popover-foreground, var(--color-foreground, #172033));
+  background: var(--color-popover, var(--color-card, #fff));
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+}
+.hti-file-preview-panel > header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--color-border, #cbd5e1); padding: .65rem .85rem; }
+.hti-file-preview-panel > header strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hti-file-preview-panel > header button { border: 1px solid var(--color-border, #cbd5e1); border-radius: .3rem; padding: .28rem .5rem; color: inherit; background: transparent; cursor: pointer; }
+.hti-file-preview-body { flex: 1 1 auto; min-height: 0; overflow: auto; padding: 1rem; }
+.hti-file-preview-body.hti-rich-text { width: 100%; max-width: 72rem; margin: 0 auto; }
+.hti-file-preview-body img { display: block; max-width: 100%; max-height: 75vh; margin: 0 auto; object-fit: contain; }
+.hti-file-preview-body iframe { display: block; width: 100%; height: min(75vh, 52rem); border: 0; }
+.hti-file-preview-body pre { overflow: auto; margin: 0; padding: .85rem; border-radius: .4rem; color: var(--color-foreground, #172033); background: var(--color-muted, #f1f5f9); white-space: pre-wrap; overflow-wrap: anywhere; }
+.hti-file-preview-body a { color: var(--color-primary, #2563eb); text-decoration: underline; }
+.hti-file-preview-body .hti-mermaid { overflow: auto; margin: 1rem 0; padding: .75rem; border: 1px solid var(--color-border, #cbd5e1); border-radius: .5rem; background: var(--color-card, #fff); text-align: center; }
+.hti-file-preview-body .hti-mermaid svg { display: inline-block; width: auto; max-width: 100%; height: auto; }
+.hti-mermaid-error { border-color: var(--color-destructive, #dc2626) !important; }
+.hti-mermaid-error-note { display: block; margin-top: .5rem; color: var(--color-destructive, #dc2626); white-space: normal; }
+@media (max-width: 700px) {
+  .hti-file-preview-body { flex: 1 1 auto; padding: .75rem; }
+  .hti-file-preview-body iframe { height: 100%; min-height: 0; }
+  .hti-file-preview-body img { max-height: calc(100dvh - 4rem); }
+}

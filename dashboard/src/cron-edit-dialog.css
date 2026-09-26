@@ -1,0 +1,63 @@
+/* Keep native Cron behavior, but make the panel a viewport-sized flex column.
+   The header and close control stay in normal flow; only the form scrolls. */
+:is(
+  [role="dialog"][aria-labelledby="create-cron-title"],
+  [role="dialog"][aria-labelledby="edit-cron-title"]
+) > [data-hti-cron-dialog-panel="true"] {
+  display: flex !important;
+  height: auto !important;
+  max-height: calc(
+    100dvh
+    - max(1rem, env(safe-area-inset-top))
+    - max(1rem, env(safe-area-inset-bottom))
+  ) !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+}
+
+#edit-cron-prompt {
+  min-height: clamp(10rem, 28dvh, 16rem) !important;
+  resize: vertical;
+}
+
+:is(
+  [role="dialog"][aria-labelledby="create-cron-title"],
+  [role="dialog"][aria-labelledby="edit-cron-title"]
+) > [data-hti-cron-dialog-panel="true"] > header {
+  position: static !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  align-items: center !important;
+  gap: .75rem;
+}
+
+:is(
+  [role="dialog"][aria-labelledby="create-cron-title"],
+  [role="dialog"][aria-labelledby="edit-cron-title"]
+) [data-hti-cron-dialog-close="true"] {
+  position: static !important;
+  display: inline-grid !important;
+  width: 2.75rem !important;
+  height: 2.75rem !important;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  margin: 0 0 0 auto !important;
+  flex: 0 0 2.75rem;
+  place-items: center;
+  border: 1px solid var(--color-border, var(--border)) !important;
+  border-radius: .5rem !important;
+  color: var(--color-popover-foreground, var(--color-card-foreground)) !important;
+  background: var(--color-popover, var(--popover)) !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+:is(
+  [role="dialog"][aria-labelledby="create-cron-title"],
+  [role="dialog"][aria-labelledby="edit-cron-title"]
+) > [data-hti-cron-dialog-panel="true"] > div.min-h-0 {
+  min-height: 0 !important;
+  padding-top: 0 !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+}

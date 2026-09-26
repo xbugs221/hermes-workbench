@@ -1,0 +1,50 @@
+name: Release
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Require matching version tag on main history
+        shell: bash
+        run: |
+          test "$GITHUB_REF_TYPE" = tag
+          version="$(python3 scripts/version.py --check)"
+          test "$GITHUB_REF_NAME" = "v$version"
+          git merge-base --is-ancestor HEAD origin/main
+  checks:
+    needs: validate
+    uses: ./.github/workflows/ci.yml
+  publish:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-${{ github.sha }}
+          path: release
+      - name: Verify and publish immutable version assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          cd release
+          sha256sum --check SHA256SUMS
+          options=()
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then options+=(--prerelease); fi
+          gh release create "$GITHUB_REF_NAME" --verify-tag --generate-notes "${options[@]}" ./*.tar.gz SHA256SUMS

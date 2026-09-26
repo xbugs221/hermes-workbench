@@ -1,0 +1,38 @@
+
+/* 看板卡片右键打开/继续 Workbench 会话；不影响原生看板拖拽层。 */
+.hti-kanban-session-menu {
+  position: fixed;
+  z-index: 2147483647;
+  min-width: 230px;
+  max-width: min(360px, calc(100vw - 16px));
+  padding: 6px;
+  border: 1px solid var(--color-border, var(--border, #cbd5e1));
+  border-radius: 8px;
+  background: var(--color-popover, var(--card, #fff));
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .22);
+  color: var(--color-popover-foreground, var(--color-foreground, #172033));
+  font-size: 13px;
+}
+.hti-kanban-session-menu button {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--color-popover-foreground, var(--color-foreground, #172033));
+  cursor: pointer;
+  text-align: left;
+}
+.hti-kanban-session-menu button:hover,
+.hti-kanban-session-menu button:focus-visible {
+  background: var(--color-accent, var(--muted, #eef2f7));
+  color: var(--color-accent-foreground, var(--color-popover-foreground, #172033));
+  outline: none;
+}
+.hti-kanban-session-menu-links {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--color-border, var(--border, #e2e8f0));
+  color: var(--color-popover-foreground, var(--color-foreground, #172033));
+}

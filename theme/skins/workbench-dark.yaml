@@ -1,0 +1,26 @@
+name: workbench-dark
+description: Workbench dark — black canvas, cyan and warm-orange accents
+
+colors:
+  background: "#000000"
+  ui_accent: "#3FD0D0"
+  banner_accent: "#FF9D3D"
+  banner_title: "#E9FAF8"
+  banner_text: "#D8F4F2"
+  ui_text: "#D8F4F2"
+  banner_dim: "#9CC4C3"
+  banner_border: "#276B6D"
+  ui_border: "#276B6D"
+  ui_ok: "#49D6A5"
+  ui_warn: "#FF9D3D"
+  ui_error: "#FF6B68"
+  prompt: "#3FD0D0"
+  input_rule: "#FF9D3D"
+  response_border: "#3FD0D0"
+  status_bar_bg: "#0A0A0A"
+  status_bar_text: "#D8F4F2"
+  status_bar_good: "#49D6A5"
+  status_bar_warn: "#FF9D3D"
+  status_bar_critical: "#FF6B68"
+  session_label: "#3FD0D0"
+  session_border: "#276B6D"

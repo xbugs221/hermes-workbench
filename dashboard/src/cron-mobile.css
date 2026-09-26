@@ -1,0 +1,48 @@
+/* On phones, give the task list and detail their own full-height screen. */
+.dashboard-cron-back { display: none; }
+
+@media (max-width: 800px) {
+  .dashboard-cron-page { height: 100%; min-height: 0; overflow: hidden; }
+  .dashboard-cron-page-header, .dashboard-cron-page-error { flex-shrink: 0; }
+  .dashboard-cron-layout { display: flex; flex: 1 1 0; min-height: 0; overflow: hidden; }
+  .dashboard-cron-list-pane {
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    border: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .dashboard-cron-list-heading { position: sticky; top: 0; z-index: 1; background: inherit; }
+  .dashboard-cron-job-row { min-height: 76px; padding: 14px 16px; gap: 5px 12px; }
+  .dashboard-cron-job-row-title { font-size: 15px; white-space: normal; overflow-wrap: anywhere; }
+  .dashboard-cron-job-row-meta { font-size: 12px; }
+  .dashboard-cron-page[data-mobile-view="list"] .dashboard-cron-detail,
+  .dashboard-cron-page[data-mobile-view="detail"] .dashboard-cron-list-pane { display: none; }
+  .dashboard-cron-page[data-mobile-view="detail"] .dashboard-cron-back {
+    display: flex;
+    flex-shrink: 0;
+    justify-content: flex-start;
+    min-height: 44px;
+    margin: 8px 16px;
+    align-self: flex-start;
+  }
+  .dashboard-cron-detail {
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .dashboard-cron-detail > * { flex-shrink: 0; }
+  .dashboard-cron-detail-header { flex-direction: column; }
+  .dashboard-cron-detail-heading h2 { white-space: normal; overflow-wrap: anywhere; }
+  .dashboard-cron-detail-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; }
+  .dashboard-cron-detail-actions .dashboard-cron-button { min-height: 44px; }
+  .dashboard-cron-task-view, .dashboard-cron-runs-view { overflow: visible; }
+  .dashboard-cron-detail-grid, .dashboard-cron-runs-view { grid-template-columns: minmax(0, 1fr); }
+  .dashboard-cron-run-list { max-height: 15rem; min-height: 0; border-right: 0; }
+  .dashboard-cron-transcript { overflow: visible; overflow-wrap: anywhere; }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "workbench",
+  "label": "Workbench",
+  "labels": {
+    "en": "Workbench",
+    "zh": "工作台"
+  },
+  "description": "Hermes 会话改名与组织、实时记录、文件编辑和终端工作台",
+  "icon": "PanelsTopLeft",
+  "version": "0.8.2",
+  "sdk_version": "1.1.0",
+  "slots": [
+    "header-right",
+    "overlay"
+  ],
+  "tab": {
+    "path": "/workbench",
+    "override": "/chat"
+  },
+  "entry": "dist/index.js",
+  "css": "dist/style.css"
+}

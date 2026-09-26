@@ -1,0 +1,40 @@
+name: Prepare release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'SemVer, e.g. 0.7.1 or 0.8.0-rc.1'
+        required: true
+        type: string
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+concurrency:
+  group: prepare-release
+  cancel-in-progress: false
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+      - name: Prepare version commit and reviewable PR
+        env:
+          VERSION: ${{ inputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          python3 scripts/version.py "$VERSION"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          branch="release/v$VERSION"
+          git switch -c "$branch"
+          git add package.json dashboard/manifest.json
+          git commit -m "chore(release): v$VERSION"
+          git push origin "$branch"
+          gh pr create --base main --head "$branch" --title "chore(release): v$VERSION" --body "Update the shared release version. After CI passes and this PR is merged, create and push tag v$VERSION on the merge commit to publish."
+          # GITHUB_TOKEN-created PRs do not automatically trigger pull_request CI.
+          gh workflow run ci.yml --ref "$branch"

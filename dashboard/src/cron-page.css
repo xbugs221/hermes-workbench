@@ -1,0 +1,283 @@
+/* Information-first redesign for native Cron job cards. */
+[data-hti-cron-auxiliary="true"],
+[data-hti-cron-native-delete="true"] {
+  display: none !important;
+}
+
+[data-hti-cron-card="true"] {
+  overflow: visible;
+  border: 1px solid color-mix(in srgb, var(--color-border, var(--border)) 75%, transparent) !important;
+  border-radius: .7rem !important;
+  background: var(--color-card, var(--card)) !important;
+  box-shadow: none !important;
+  font-family: var(--theme-font-sans, ui-sans-serif, system-ui, sans-serif) !important;
+  color: var(--color-card-foreground, currentColor) !important;
+}
+
+[data-hti-cron-card-body="true"] {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch !important;
+  gap: .85rem !important;
+  padding: 1rem !important;
+}
+
+[data-hti-cron-card-main="true"] {
+  min-width: 0;
+}
+
+[data-hti-cron-title-row="true"] {
+  display: flex !important;
+  align-items: center !important;
+  gap: .55rem !important;
+  margin-bottom: .65rem !important;
+}
+
+[data-hti-cron-title="true"] {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-card-foreground, currentColor) !important;
+  font-family: inherit !important;
+  font-size: .95rem !important;
+  font-weight: 650 !important;
+  line-height: 1.4;
+  letter-spacing: 0 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The native state text remains available to assistive technology and hover. */
+[data-hti-cron-status] {
+  order: -1;
+  display: block !important;
+  flex: 0 0 .6rem;
+  width: .6rem !important;
+  height: .6rem !important;
+  overflow: hidden;
+  border: 0 !important;
+  border-radius: 999px !important;
+  padding: 0 !important;
+  color: transparent !important;
+  background: var(--color-success, #22c55e) !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-success, #22c55e) 18%, transparent);
+}
+
+[data-hti-cron-status="paused"] {
+  background: var(--color-warning, #eab308) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-warning, #eab308) 18%, transparent);
+}
+
+[data-hti-cron-status="error"] {
+  background: var(--color-destructive, #ef4444) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-destructive, #ef4444) 18%, transparent);
+}
+
+[data-hti-cron-status="inactive"] {
+  background: var(--color-muted-foreground, #9ca3af) !important;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-muted-foreground, #9ca3af) 18%, transparent);
+}
+
+[data-hti-cron-metadata="true"] {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .3rem 1.25rem !important;
+  color: var(--color-muted-foreground, var(--muted-foreground)) !important;
+  font-family: inherit !important;
+  font-size: .8rem !important;
+  line-height: 1.5;
+}
+
+[data-hti-cron-meta] {
+  font-family: inherit !important;
+  white-space: nowrap;
+}
+
+[data-hti-cron-actions="true"] {
+  position: relative;
+  display: grid !important;
+  grid-template-columns: auto auto 1fr auto auto;
+  align-items: center;
+  gap: .4rem !important;
+  padding-top: .75rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-border, var(--border)) 55%, transparent);
+}
+
+[data-hti-cron-actions="true"] > button[data-hti-cron-action] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: auto !important;
+  height: 2rem !important;
+  min-width: 0;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  border-radius: .4rem !important;
+  padding: 0 .6rem !important;
+  color: var(--color-muted-foreground, var(--muted-foreground)) !important;
+  background: transparent !important;
+  font-family: inherit !important;
+  font-size: .76rem !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+[data-hti-cron-card-main="true"] > p.text-destructive {
+  display: -webkit-box;
+  overflow: hidden;
+  margin-top: .55rem;
+  font-family: inherit !important;
+  font-size: .74rem !important;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+[data-hti-cron-actions="true"] > button[data-hti-cron-action] > svg {
+  display: none !important;
+}
+
+[data-hti-cron-actions="true"] > button[data-hti-cron-action="edit"] {
+  grid-column: 4;
+}
+
+[data-hti-cron-actions="true"] > button[data-hti-cron-action]:hover,
+[data-hti-cron-actions="true"] > button[data-hti-cron-action]:focus-visible,
+[data-hti-cron-more="true"] > summary:hover,
+[data-hti-cron-more="true"] > summary:focus-visible {
+  color: var(--color-card-foreground, currentColor) !important;
+  background: var(--color-accent, var(--accent)) !important;
+}
+
+[data-hti-cron-more="true"] {
+  position: relative;
+  grid-column: 5;
+}
+
+[data-hti-cron-more="true"] > summary {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: .4rem;
+  color: var(--color-muted-foreground, var(--muted-foreground));
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1;
+  list-style: none;
+}
+
+[data-hti-cron-more="true"] > summary::-webkit-details-marker {
+  display: none;
+}
+
+[data-hti-cron-more="true"] > button {
+  position: absolute;
+  z-index: 20;
+  right: 0;
+  bottom: calc(100% + .4rem);
+  width: max-content;
+  border: 1px solid var(--color-border, var(--border));
+  border-radius: .45rem;
+  padding: .5rem .7rem;
+  color: var(--color-destructive, #ef4444);
+  background: var(--color-popover, var(--popover));
+  box-shadow: 0 .5rem 1.5rem color-mix(in srgb, #000 20%, transparent);
+  font-family: inherit;
+  font-size: .76rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+[data-hti-cron-runs="true"] {
+  min-width: 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-border, var(--border)) 55%, transparent);
+  padding-top: .65rem;
+  color: var(--color-muted-foreground, var(--muted-foreground));
+  font-size: .76rem;
+}
+
+[data-hti-cron-runs="true"] > summary {
+  width: max-content;
+  border-radius: .35rem;
+  padding: .22rem .35rem;
+  color: var(--color-card-foreground, currentColor);
+  cursor: pointer;
+  font-weight: 650;
+}
+
+[data-hti-cron-runs="true"] > summary:hover,
+[data-hti-cron-runs="true"] > summary:focus-visible {
+  background: var(--color-accent, var(--accent));
+}
+
+[data-hti-cron-runs-content="true"] { padding: .35rem .1rem 0; }
+
+[data-hti-cron-runs-list="true"] {
+  display: grid;
+  max-height: 16rem;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-hti-cron-runs-list="true"] a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .75rem;
+  border-radius: .35rem;
+  padding: .4rem .45rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+[data-hti-cron-runs-list="true"] a:hover,
+[data-hti-cron-runs-list="true"] a:focus-visible {
+  color: var(--color-card-foreground, currentColor);
+  background: var(--color-accent, var(--accent));
+}
+
+[data-hti-cron-runs-list="true"] span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-hti-cron-runs-list="true"] time { white-space: nowrap; }
+
+@media (max-width: 640px) {
+  [data-hti-cron-card-body="true"] {
+    gap: .75rem !important;
+    padding: .85rem !important;
+  }
+
+  [data-hti-cron-title="true"] {
+    display: -webkit-box;
+    overflow: hidden;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  [data-hti-cron-metadata="true"] {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    gap: .2rem !important;
+  }
+
+  [data-hti-cron-actions="true"] {
+    gap: .15rem !important;
+  }
+
+  [data-hti-cron-actions="true"] > button[data-hti-cron-action] {
+    padding-inline: .45rem !important;
+    font-size: .72rem !important;
+  }
+}

@@ -1,0 +1,54 @@
+/* Compact Kanban activity: state by colour, recent worker output by two-line tail. */
+.hermes-kanban-card[data-hti-kanban-state] .hermes-kanban-card-content {
+  position: relative;
+  border-inline-start: 3px solid var(--hti-kanban-state, var(--color-border));
+}
+
+.hermes-kanban-card[data-hti-kanban-state="triage"] { --hti-kanban-state: var(--color-muted-foreground); }
+.hermes-kanban-card[data-hti-kanban-state="todo"] { --hti-kanban-state: var(--color-muted-foreground); }
+.hermes-kanban-card[data-hti-kanban-state="scheduled"] { --hti-kanban-state: #7c6fca; }
+.hermes-kanban-card[data-hti-kanban-state="ready"] { --hti-kanban-state: #d4b348; }
+.hermes-kanban-card[data-hti-kanban-state="running"] { --hti-kanban-state: #3fb97d; }
+.hermes-kanban-card[data-hti-kanban-state="blocked"] { --hti-kanban-state: var(--color-destructive, #d14a4a); }
+.hermes-kanban-card[data-hti-kanban-state="review"] { --hti-kanban-state: #48b0c4; }
+.hermes-kanban-card[data-hti-kanban-state="done"] { --hti-kanban-state: #4a8cd1; }
+
+.hti-kanban-state-mark {
+  position: absolute;
+  inset-block-start: .56rem;
+  inset-inline-end: .6rem;
+  width: .42rem;
+  height: .42rem;
+  border-radius: 999px;
+  background: var(--hti-kanban-state);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hti-kanban-state) 16%, transparent);
+}
+
+.hti-kanban-recent-output {
+  display: -webkit-box;
+  pointer-events: none;
+  margin: .08rem 0 0;
+  overflow: hidden;
+  color: var(--color-muted-foreground);
+  background: transparent;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: .66rem;
+  line-height: 1.38;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Relative timestamps and experimental textual live labels duplicate the colour state. */
+.hermes-kanban-card .hermes-kanban-ago,
+.hermes-kanban-card .hti-kanban-live-label,
+.hermes-kanban-card .hti-kanban-heartbeat {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hermes-kanban-card[data-hti-kanban-state] .hermes-kanban-card-content {
+    transition: none !important;
+  }
+}

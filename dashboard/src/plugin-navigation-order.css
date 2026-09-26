@@ -1,0 +1,53 @@
+/* The moved native plugin group is now the first sidebar section, not a footer section. */
+#app-sidebar nav > .hti-sidebar-plugin-nav-first {
+  border-top: 0 !important;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+  padding-bottom: .5rem;
+}
+
+/* Mobile drawer and expanded desktop sidebar size to useful content instead
+   of reserving Tailwind's fixed w-64. */
+#app-sidebar.hti-sidebar-adaptive-width {
+  width: min(13rem, 82vw) !important;
+  min-width: min(12rem, 82vw);
+  max-width: 82vw;
+}
+
+@media (min-width: 1024px) {
+  #app-sidebar.hti-sidebar-adaptive-width:not([class~="lg:w-14"]) {
+    width: var(--hti-host-sidebar-width, fit-content) !important;
+    min-width: 12rem;
+    max-width: 26.25rem;
+  }
+
+  /* The host always signals desktop collapse with lg:w-14. Override the
+     mobile/expanded adaptive width at equal specificity instead of leaving
+     its !important 13rem width in force. */
+  #app-sidebar.hti-sidebar-adaptive-width[class~="lg:w-14"] {
+    width: 3.5rem !important;
+    min-width: 3.5rem;
+    max-width: 3.5rem;
+  }
+
+  #app-sidebar[class~="lg:w-14"] [data-hti-sidebar-tool] > a > span:not([aria-hidden]),
+  #app-sidebar[class~="lg:w-14"] [data-hti-sidebar-tool] > a > span[data-hti-sidebar-collapsed-label] {
+    display: none !important;
+  }
+}
+
+/* The sidebar footer keeps theme, language and system actions on one row:
+   no forced column stacking, no full-width stretching. */
+#app-sidebar .hti-sidebar-preferences-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: .35rem;
+}
+
+#app-sidebar .hti-sidebar-preferences {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .35rem;
+  width: auto;
+}

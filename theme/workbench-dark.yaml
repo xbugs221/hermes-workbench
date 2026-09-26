@@ -1,0 +1,84 @@
+# 文件目的：提供与 Hermes 聊天区一致的南科大青橙暗色主题。
+name: workbench-dark
+label: Workbench Dark
+description: Pure black canvas with vivid cyan and warm orange accents
+
+palette:
+  background: { hex: "#000000", alpha: 1 }
+  midground: { hex: "#D8F4F2", alpha: 1 }
+  foreground: { hex: "#FF9D3D", alpha: 0 }
+  warmGlow: "rgba(255, 157, 61, 0)"
+  noiseOpacity: 0
+
+typography:
+  fontSans: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+  fontMono: 'ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace'
+  fontDisplay: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+  baseSize: "16px"
+  lineHeight: "1.6"
+  letterSpacing: "-0.004em"
+
+layout: { radius: "0.75rem", density: comfortable }
+layoutVariant: standard
+terminalBackground: "#000000"
+terminalForeground: "#D8F4F2"
+seriesColors: { inputTokenAccent: "#3FD0D0", outputTokenAccent: "#FF9D3D" }
+swatchColors: ["#000000", "#3FD0D0", "#FF9D3D"]
+
+colorOverrides:
+  card: "#000000"
+  cardForeground: "#E9FAF8"
+  popover: "#000000"
+  popoverForeground: "#E9FAF8"
+  primary: "#3FD0D0"
+  primaryForeground: "#09272A"
+  secondary: "#111111"
+  secondaryForeground: "#D8F4F2"
+  muted: "#0A0A0A"
+  mutedForeground: "#9CC4C3"
+  accent: "#FF9D3D"
+  accentForeground: "#2E1906"
+  destructive: "#FF6B68"
+  destructiveForeground: "#FFFFFF"
+  success: "#49D6A5"
+  warning: "#FF9D3D"
+  border: "rgba(63, 208, 208, 0.28)"
+  input: "rgba(63, 208, 208, 0.38)"
+  ring: "#FF9D3D"
+
+customCSS: |
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1000;
+    height: 3px;
+    pointer-events: none;
+    background: linear-gradient(90deg, #3FD0D0 0 72%, #FF9D3D 72% 100%);
+  }
+  ::selection { color: #E9FAF8; background: rgba(255, 157, 61, 0.35); }
+  /* Keep selected left-nav rows opaque against the black sidebar and retain high-contrast text. */
+  #app-sidebar nav a[aria-current="page"] {
+    background: #123E40 !important;
+    color: #E9FAF8 !important;
+    box-shadow: inset 3px 0 0 #3FD0D0;
+  }
+  /* Only color the label/icon: the following absolute spans are visual overlays and must retain their own opacity. */
+  #app-sidebar nav a[aria-current="page"] > span.truncate,
+  #app-sidebar nav a[aria-current="page"] > svg { color: #E9FAF8 !important; }
+  #app-sidebar nav a[aria-current="page"]:hover { background: #195357 !important; }
+  #app-sidebar nav a[aria-current="page"]:hover > span.truncate,
+  #app-sidebar nav a[aria-current="page"]:hover > svg { color: #FFFFFF !important; }
+  @media (max-width: 1023px) {
+    /* The mobile drawer overlays a live TUI; never allow its component token to become transparent. */
+    #app-sidebar {
+      background: #000000 !important;
+      background-image: none !important;
+      opacity: 1 !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .text-sm.text-foreground.leading-relaxed,
+    .text-sm.text-foreground.leading-relaxed .text-sm { font-size: 1rem !important; line-height: 1.7 !important; }
+    .text-sm.text-foreground.leading-relaxed .text-xs { font-size: 0.875rem !important; }
+  }

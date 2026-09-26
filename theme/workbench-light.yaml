@@ -1,0 +1,99 @@
+# 文件目的：提供南科大青橙风格的 Hermes Dashboard 亮色主题。
+name: workbench-light
+label: Workbench Light
+description: Pure white canvas with cyan and warm orange accents
+
+palette:
+  background: { hex: "#FFFFFF", alpha: 1 }
+  midground: { hex: "#075B5F", alpha: 1 }
+  foreground: { hex: "#F28C28", alpha: 0 }
+  warmGlow: "rgba(242, 140, 40, 0)"
+  noiseOpacity: 0
+
+typography:
+  fontSans: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+  fontMono: 'ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace'
+  fontDisplay: 'system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
+  baseSize: "16px"
+  lineHeight: "1.6"
+  letterSpacing: "-0.004em"
+
+layout: { radius: "0.75rem", density: comfortable }
+layoutVariant: standard
+terminalBackground: "#FFFFFF"
+terminalForeground: "#075B5F"
+seriesColors: { inputTokenAccent: "#008F95", outputTokenAccent: "#F28C28" }
+swatchColors: ["#FFFFFF", "#008F95", "#F28C28"]
+
+colorOverrides:
+  card: "#FFFFFF"
+  cardForeground: "#123E40"
+  popover: "#FFFFFF"
+  popoverForeground: "#123E40"
+  primary: "#008F95"
+  primaryForeground: "#FFFFFF"
+  secondary: "#F2F7F7"
+  secondaryForeground: "#075B5F"
+  muted: "#F5F7F7"
+  mutedForeground: "#527174"
+  accent: "#F28C28"
+  accentForeground: "#3D2208"
+  destructive: "#D94C4C"
+  destructiveForeground: "#FFFFFF"
+  success: "#12866F"
+  warning: "#F28C28"
+  border: "rgba(0, 143, 149, 0.28)"
+  input: "rgba(0, 143, 149, 0.38)"
+  ring: "#F28C28"
+
+customCSS: |
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 1000;
+    height: 3px;
+    pointer-events: none;
+    background: linear-gradient(90deg, #008F95 0 72%, #F28C28 72% 100%);
+  }
+  ::selection { color: #123E40; background: rgba(242, 140, 40, 0.28); }
+  /* Pin ordinary sidebar labels too: semantic utility tokens can otherwise resolve to invisible white on the light canvas. */
+  #app-sidebar nav a:not([aria-current="page"]),
+  #app-sidebar nav a:not([aria-current="page"]) > span.truncate,
+  #app-sidebar nav a:not([aria-current="page"]) > svg { color: #075B5F !important; }
+  #app-sidebar nav a:not([aria-current="page"]):hover { background: #E6F3F3 !important; color: #063D40 !important; }
+  #app-sidebar nav a:not([aria-current="page"]):hover > span.truncate,
+  #app-sidebar nav a:not([aria-current="page"]):hover > svg { color: #063D40 !important; }
+  /* The active left-nav item previously had only a 1px indicator; give it an opaque surface and explicit foreground. */
+  #app-sidebar nav a[aria-current="page"] {
+    background: #D9F0F0 !important;
+    color: #063D40 !important;
+    box-shadow: inset 3px 0 0 #008F95;
+  }
+  /* Only color the label/icon: the following absolute spans are visual overlays and must retain their own opacity. */
+  #app-sidebar nav a[aria-current="page"] > span.truncate,
+  #app-sidebar nav a[aria-current="page"] > svg { color: #063D40 !important; }
+  #app-sidebar nav a[aria-current="page"]:hover { background: #C6E8E9 !important; }
+  #app-sidebar nav a[aria-current="page"]:hover > span.truncate,
+  #app-sidebar nav a[aria-current="page"]:hover > svg { color: #063D40 !important; }
+  /* Keep inline Markdown code readable on the white Workbench canvas; fenced blocks retain their own syntax palette. */
+  .msg-body :not(pre) > code,
+  .preview-md :not(pre) > code {
+    border: 1px solid #78B6B8;
+    color: #063D40;
+    background: #E6F3F3;
+    font-weight: 600;
+  }
+  @media (max-width: 1023px) {
+    /* The mobile drawer overlays a live TUI; never allow its component token to become transparent. */
+    #app-sidebar {
+      background: #FFFFFF !important;
+      background-image: none !important;
+      opacity: 1 !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .text-sm.text-foreground.leading-relaxed,
+    .text-sm.text-foreground.leading-relaxed .text-sm { font-size: 1rem !important; line-height: 1.7 !important; }
+    .text-sm.text-foreground.leading-relaxed .text-xs { font-size: 0.875rem !important; }
+  }

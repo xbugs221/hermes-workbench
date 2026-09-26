@@ -1,0 +1,130 @@
+/* Ten low-frequency admin destinations collapse behind one compact disclosure row. */
+#app-sidebar .hti-secondary-nav-hidden,
+#app-sidebar .hti-native-theme-picker-hidden,
+#app-sidebar .hti-sidebar-identity-hidden {
+  display: none !important;
+}
+
+/* The sidebar profile selector is the single persistent scope indicator. */
+.hti-profile-scope-banner-hidden {
+  display: none !important;
+}
+
+#app-sidebar [data-hti-version-brand] {
+  font-family: var(--theme-font-mono, ui-monospace, monospace) !important;
+  font-size: .78rem !important;
+  line-height: 1 !important;
+  letter-spacing: .08em !important;
+  text-transform: lowercase !important;
+}
+
+#app-sidebar [data-hti-sidebar-more] summary {
+  list-style: none;
+}
+
+#app-sidebar [data-hti-sidebar-more] summary::-webkit-details-marker {
+  display: none;
+}
+
+#app-sidebar .hti-sidebar-more-chevron {
+  margin-left: auto;
+  transition: transform 150ms ease;
+}
+
+#app-sidebar .hti-sidebar-more-details[open] > summary .hti-sidebar-more-chevron {
+  transform: rotate(90deg);
+}
+
+#app-sidebar .hti-sidebar-more-menu {
+  margin: .15rem .45rem .45rem 1rem;
+  padding-left: .45rem;
+  border-left: 1px solid var(--color-border, currentColor);
+}
+
+#app-sidebar .hti-sidebar-more-menu a {
+  padding-top: .45rem !important;
+  padding-bottom: .45rem !important;
+  font-size: .75rem !important;
+}
+
+/* The whole SYSTEM action block is emptied by moving restart/update into the
+   compact footer row, so its label/status strip no longer reserves height. */
+#app-sidebar .hti-system-section-collapsed {
+  display: none !important;
+}
+
+/* Theme picker: native picker stays but is hidden; our two-state toggle
+   renders as a compact icon-only control with a tooltip. */
+#app-sidebar .hti-theme-toggle-icon {
+  display: inline-grid;
+  width: 1rem;
+  place-items: center;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+#app-sidebar [data-hti-theme-toggle] {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 2rem !important;
+  height: 2rem !important;
+  padding: 0 !important;
+  border-radius: .375rem;
+}
+
+/* LanguageSwitcher hides its only text below sm, leaving an invisible button.
+   Keep the localized language name visible in the compact footer. */
+#app-sidebar [data-hti-language-trigger] .hidden {
+  display: inline !important;
+}
+
+#app-sidebar [data-hti-language-trigger] {
+  display: inline-flex !important;
+  min-width: 2rem;
+  justify-content: center;
+}
+
+
+/* The compact footer row sits below the nav; keep it on one visual line and
+   let the sidebar follow its content width (adaptive sidebar already active). */
+#app-sidebar .hti-sidebar-preferences {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: .15rem !important;
+}
+
+#app-sidebar .hti-sidebar-preferences-row {
+  display: flex;
+  align-items: center;
+  gap: .15rem;
+}
+
+/* The collapsed rail keeps the single More row compact; its submenu opens as a readable popover. */
+@media (min-width: 1024px) {
+  #app-sidebar[class~="lg:w-14"] .hti-sidebar-more-label,
+  #app-sidebar[class~="lg:w-14"] .hti-sidebar-more-chevron {
+    display: none;
+  }
+
+  #app-sidebar[class~="lg:w-14"] [data-hti-sidebar-more] {
+    position: relative;
+  }
+
+  #app-sidebar[class~="lg:w-14"] .hti-sidebar-more-menu {
+    position: fixed;
+    z-index: 1100;
+    left: 3.25rem;
+    bottom: 5rem;
+    min-width: 11rem;
+    max-height: min(70vh, 32rem);
+    overflow-y: auto;
+    margin: 0;
+    padding: .35rem;
+    border: 1px solid var(--color-border, currentColor);
+    background: var(--color-popover, var(--background-base));
+    color: var(--color-popover-foreground, currentColor);
+    box-shadow: 0 12px 30px color-mix(in srgb, #000 35%, transparent);
+  }
+}

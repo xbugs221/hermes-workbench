@@ -1,0 +1,130 @@
+/* ChatGPT-like vertical navigation, using the active Dashboard theme. */
+.dashboard-brand-row > a:not(.dashboard-brand) {
+  display: grid; place-items: center; width: 32px; height: 32px; flex: 0 0 32px;
+  border: 0; background: transparent; border-radius: 8px; color: var(--dashboard-muted); padding: 0; cursor: pointer;
+}
+.dashboard-brand-row > a:not(.dashboard-brand) > span { display: none; }
+.dashboard-brand-row > a:not(.dashboard-brand):hover,
+.dashboard-brand-row > a[aria-current="page"] { background: var(--dashboard-active); color: var(--dashboard-ink); }
+.dashboard-global-nav .dashboard-nav-primary { display: flex; flex-direction: column; gap: 2px; }
+.dashboard-global-nav .dashboard-nav-primary > a,
+.dashboard-global-nav .dashboard-nav-pair > a,
+.dashboard-chat-actions .codex-navigation-create-actions > button {
+  display: flex; flex-direction: row; align-items: center; justify-content: flex-start;
+  gap: 8px; width: 100%; min-width: 0; height: auto; min-height: 40px; flex: 0 0 auto;
+  padding: 9px 10px; border: 0; border-radius: 10px; text-align: left;
+  font: inherit; color: var(--dashboard-ink); background: transparent; cursor: pointer;
+}
+.dashboard-chat-actions .codex-navigation-create-actions,
+.dashboard-global-nav .dashboard-nav-pair { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+.dashboard-chat-actions .codex-navigation-create-actions { display: contents; }
+.dashboard-chat-actions .codex-navigation-create-actions > button,
+.dashboard-global-nav .dashboard-nav-pair > a { padding: 9px 8px; font-size: 13px; white-space: nowrap; }
+.dashboard-brand-row { gap: 2px; }
+.dashboard-global-nav .dashboard-brand { margin: 0 4px; font-size: 18px; }
+.dashboard-chat-actions .codex-navigation-create-actions > button:hover,
+.dashboard-chat-actions .codex-navigation-create-actions > button:focus-visible { background: var(--dashboard-active); }
+.dashboard-chat-actions .codex-ui-icon,
+.dashboard-global-nav .dashboard-nav-primary > a svg,
+.dashboard-global-nav .dashboard-nav-pair > a svg { width: 18px; height: 18px; flex: 0 0 18px; }
+.dashboard-global-nav .dashboard-workbench-group { margin-top: 16px; }
+.dashboard-global-nav .dashboard-workbench-sessions { margin-top: 0; }
+#dashboard-workbench-sessions .codex-session-list { padding: 0 0 12px; gap: 0; }
+.project-section-heading { display: flex; align-items: center; justify-content: space-between; min-height: 36px;
+  padding: 4px 10px; color: var(--dashboard-muted, #68737d); font-size: 12px; font-weight: 500; }
+.project-heading-actions { display: flex; align-items: center; gap: 2px; }
+.project-history-panel { border: 1px solid var(--dashboard-line); border-radius: 8px; margin: 0 6px 8px; }
+.project-history-panel[hidden] { display: none; }
+.project-create, .project-history-toggle, .project-actions button { display: grid; place-items: center; width: 28px; height: 28px;
+  border: 0; border-radius: 6px; padding: 0; background: transparent; color: inherit; cursor: pointer; }
+.project-create:hover, .project-history-toggle:hover, .project-history-toggle[aria-expanded="true"],
+.project-actions button:hover { color: var(--dashboard-ink); background: var(--dashboard-active); }
+.project-folder { border-radius: 10px; }
+.project-folder-heading { display: flex; align-items: center; gap: 9px; min-height: 40px; padding: 6px 8px 6px 10px;
+  border-radius: 10px; cursor: pointer; list-style: none; color: var(--dashboard-ink); }
+.project-folder-heading::-webkit-details-marker { display: none; }
+.project-folder-heading > svg { flex: 0 0 18px; }
+.project-folder-heading:hover { background: var(--dashboard-active); }
+.project-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project-count { font-size: 11px; color: var(--dashboard-muted); }
+.project-actions { display: none; align-items: center; gap: 2px; }
+.project-folder-heading:hover .project-actions, .project-folder-heading:focus-within .project-actions { display: flex; }
+.project-folder-heading:hover .project-count, .project-folder-heading:focus-within .project-count { display: none; }
+.project-folder > .project-session-drag { margin-left: 15px; border-left: 1px solid var(--dashboard-line); padding-left: 3px; }
+.project-temporary { margin-top: 14px; border-radius: 10px; min-height: 78px; }
+.project-empty { margin: 0; padding: 8px 10px 12px; color: var(--dashboard-muted); font-size: 12px; line-height: 1.6; white-space: normal; }
+.is-drop-target { background: var(--dashboard-active); outline: 2px dashed var(--dashboard-accent, #71818b); outline-offset: -2px; }
+.project-session-drag[draggable="true"] { cursor: grab; }
+.dashboard-brand-row a:focus-visible,
+.project-history-toggle:focus-visible, .project-folder-heading:focus-visible,
+.project-create:focus-visible, .project-actions button:focus-visible { outline: 2px solid var(--dashboard-accent); outline-offset: -2px; }
+@media (max-width: 800px) {
+  /* Keep the mobile drawer compact: paired tabs size to their labels instead
+     of stretching two half-width buttons across the whole panel. */
+  .dashboard-global-nav .dashboard-nav-pair {
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+    gap: 8px;
+  }
+  .dashboard-chat-actions .codex-navigation-create-actions {
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+    gap: 8px;
+  }
+  .dashboard-global-nav .dashboard-nav-pair > a,
+  .dashboard-global-nav .dashboard-workspace-button,
+  .dashboard-chat-actions .codex-navigation-create-actions > button {
+    width: auto;
+    min-width: 4.6rem;
+    padding-inline: 8px;
+  }
+  /* The host mobile rules give search rows a compact fixed rhythm. Let the
+     title and its metadata occupy two explicit lines so they cannot overlap. */
+  .codex-session-search-result {
+    height: auto !important;
+    min-height: 4.25rem;
+    grid-template-rows: min-content min-content;
+    row-gap: .35rem;
+    align-content: start;
+    line-height: 1.35;
+  }
+  .codex-session-search-result-title {
+    line-height: 1.35;
+  }
+  .codex-session-search-result-meta {
+    line-height: 1.35;
+  }
+  .dashboard-global-nav .dashboard-nav-primary > a span { font-size: 14px; }
+  .dashboard-global-nav .dashboard-nav-primary > a,
+  .dashboard-chat-actions .codex-navigation-create-actions > button { min-height: 40px; }
+  .project-actions { display: flex; }
+  .project-actions button, .project-create { width: 36px; height: 36px; }
+  .project-count { display: none; }
+}
+
+:root[data-workbench-shell="true"][data-workbench-theme="dark"][data-workbench-view="/chat"]
+  .dashboard-chat-actions .codex-new-chat { color: var(--dashboard-ink); }
+
+/* Only internal navigation drags reveal the additional pane destination. */
+.codex-multi-pane { position: relative; }
+.codex-pane-drop-zone { position: absolute; top: 8px; bottom: 8px; right: 8px; width: min(42%, 360px); z-index: 90;
+  display: grid; place-items: center; border: 2px dashed var(--dashboard-accent, #71818b); border-radius: 12px;
+  background: color-mix(in srgb, var(--dashboard-active, #e5f0ef) 88%, transparent); color: var(--dashboard-ink, #263b49); }
+.codex-pane-drop-zone > span { pointer-events: none; padding: 12px; text-align: center; font-size: 14px; }
+.codex-pane-drop-notice { position: absolute; z-index: 91; bottom: 16px; right: 16px; left: 16px; margin: auto; width: fit-content; max-width: calc(100% - 32px);
+  display: flex; gap: 12px; align-items: center; padding: 10px 14px; border: 1px solid var(--dashboard-line, #d6dfe3); border-radius: 10px;
+  background: var(--dashboard-surface, #fff); color: var(--dashboard-ink, #263b49); font-size: 13px; }
+.codex-pane-drop-notice button { border: 0; background: transparent; color: inherit; cursor: pointer; font-size: 20px; }
+
+.dashboard-global-nav .dashboard-workspace-button { display: flex; align-items: center; gap: 8px; padding: 9px 8px; border: 0; border-radius: 10px; background: transparent; color: var(--dashboard-ink); font: inherit; font-size: 13px; cursor: pointer; text-align: left; }
+.dashboard-workspace-button svg { width: 18px; height: 18px; }
+.dashboard-workspace-button:hover { background: var(--dashboard-active); }
+.codex-new-chat { -webkit-touch-callout: none; user-select: none; }
+.new-session-workspace-menu { position: fixed; z-index: 1000; width: 280px; max-width: calc(100vw - 16px); max-height: min(360px, 60vh); overflow: auto; padding: 6px; border: 1px solid var(--dashboard-line, #d6dfe3); border-radius: 10px; background: var(--dashboard-surface, #fff); color: var(--dashboard-ink, #263b49); box-shadow: 0 8px 28px #0002; }
+.new-session-workspace-heading { padding: 8px; font-size: 12px; color: var(--dashboard-muted); }
+.new-session-workspace-menu > button { display: flex; flex-direction: column; gap: 4px; width: 100%; padding: 10px 8px; min-height: 44px; border: 0; border-radius: 6px; text-align: left; color: inherit; background: transparent; cursor: pointer; }
+.new-session-workspace-menu > button:hover, .new-session-workspace-menu > button:focus-visible { background: var(--dashboard-active, #e5f0ef); }
+.new-session-workspace-menu small { overflow-wrap: anywhere; color: var(--dashboard-muted); }
+.new-session-workspace-menu p { padding: 8px; font-size: 13px; }
+.dashboard-chat-actions .new-session-workspace-menu > button { height: auto; min-height: 48px; align-items: flex-start; justify-content: center; font-size: 13px; line-height: 1.4; }
+.dashboard-chat-actions .new-session-workspace-menu > button:hover, .dashboard-chat-actions .new-session-workspace-menu > button:focus-visible { font-size: 13px; }

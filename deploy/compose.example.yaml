@@ -1,0 +1,41 @@
+# A single managed instance. Supply an image with the runtime described in README.md.
+services:
+  workbench:
+    image: ${WORKBENCH_IMAGE:?Set WORKBENCH_IMAGE}
+    restart: unless-stopped
+    init: true
+    user: "0:0"
+    entrypoint: ["python3", "/opt/data/workbench/bootstrap/combined_runtime.py"]
+    working_dir: /opt/data/workspace
+    environment:
+      HOME: /opt/data
+      WORKBENCH_RELEASE_HOME: /opt/data/workbench
+      HERMES_WORKBENCH_HERMES_HOME: /opt/data
+      HERMES_WORKBENCH_RUNTIME_UID: ${WORKBENCH_UID:?Set WORKBENCH_UID}
+      HERMES_WORKBENCH_RUNTIME_GID: ${WORKBENCH_GID:?Set WORKBENCH_GID}
+      HERMES_WORKBENCH_ALLOWED_USERS: ${WORKBENCH_ALLOWED_USERS:?Set WORKBENCH_ALLOWED_USERS}
+      HERMES_DASHBOARD_TRUSTED_PROXY_SECRET: ${WORKBENCH_PROXY_SECRET:?Set WORKBENCH_PROXY_SECRET}
+      HERMES_WORKBENCH_RELEASE_REPOSITORY: ${WORKBENCH_RELEASE_REPOSITORY:-xbugs221/hermes-workbench}
+      HERMES_WORKBENCH_PORT: "8787"
+      HERMES_SOURCE: /opt/hermes
+      PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUNBUFFERED: "1"
+      CODEX_HOME: /opt/data/.hermes-workbench/codex-home
+      CODEX_APP_SERVER_ENDPOINT: ws://127.0.0.1:4500
+      CODEX_APP_SERVER_TOKEN_FILE: /opt/data/.hermes-workbench/codex-home/ws-token
+    volumes:
+      - ${WORKBENCH_DATA_DIR:?Set WORKBENCH_DATA_DIR}:/opt/data
+      - ${WORKBENCH_WORKSPACE_DIR:?Set WORKBENCH_WORKSPACE_DIR}:/opt/data/workspace
+    # Join only the private network of the authenticated proxy; no host port published.
+    networks: [dashboard]
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8787/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+      start_period: 20s
+    stop_grace_period: 10s
+networks:
+  dashboard:
+    external: true
+    name: ${WORKBENCH_NETWORK:?Set WORKBENCH_NETWORK}

@@ -1,0 +1,49 @@
+/* Progressive disclosure for native Kanban task creation. */
+.hti-kanban-create-workspace {
+  display: grid;
+  gap: .3rem;
+  margin-top: .75rem;
+}
+/* The host's utility text classes can resolve to black in Workbench dark; use semantic popover colors explicitly. */
+.hti-kanban-create-workspace label {
+  color: var(--color-popover-foreground, var(--color-foreground, var(--midground, #f0e6d2))) !important;
+  font-size: .82rem;
+  font-weight: 650;
+}
+.hti-kanban-create-workspace select {
+  min-height: 2rem;
+  width: 100%;
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: .35rem;
+  padding: .3rem .45rem;
+  color: var(--color-popover-foreground, var(--color-foreground, var(--midground, #f0e6d2))) !important;
+  background: var(--color-popover, var(--color-card, #fff));
+  font: inherit;
+}
+.hti-kanban-create-workspace p {
+  margin: 0;
+  color: var(--color-muted-foreground, var(--midground, #b9a98d)) !important;
+  font-size: .72rem;
+  line-height: 1.4;
+}
+.hti-kanban-create-body-field {
+  display: grid;
+  gap: .3rem;
+  margin-top: .35rem;
+}
+.hti-kanban-create-body-label {
+  color: var(--color-popover-foreground, var(--color-foreground, var(--midground, #f0e6d2))) !important;
+  font-size: .82rem;
+  font-weight: 650;
+}
+.hti-kanban-create-body {
+  min-height: 5rem;
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: .35rem;
+  padding: .45rem .55rem;
+  color: var(--color-popover-foreground, var(--color-foreground, var(--midground, #f0e6d2)));
+  background: var(--color-popover, var(--color-card, #fff));
+  font: inherit;
+}

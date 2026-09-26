@@ -1,0 +1,8 @@
+pytest
+fastapi
+pydantic
+httpx
+python-multipart
+websockets
+mcp<2
+uvicorn

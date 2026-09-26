@@ -1,0 +1,122 @@
+/* Shared stone, oak and moss palette. Applies to native pages and portal dialogs
+   as well as Workbench; semantic status and syntax colors remain distinguishable. */
+:root[data-workbench-shell="true"] {
+  --mc-surface: #f3f0e7;
+  --mc-raised: #e8e4d8;
+  --mc-nav: #deddd5;
+  --mc-ink: #30352c;
+  --mc-muted: #66685b;
+  --mc-line: #8b8c7b;
+  --mc-line-soft: #d0cebf;
+  --mc-accent: #496b2d;
+  --mc-active: #d7dfc7;
+  --mc-on-accent: #fffbed;
+  --mc-wood: #805f35;
+  --mc-code: #e5e3d8;
+  --mc-danger: #a5342d;
+  --mc-danger-soft: #fae9e4;
+  --mc-warning: #80571b;
+  --mc-warning-soft: #f3e5c8;
+  --mc-success: #3c692c;
+  --mc-highlight: #fffdf4;
+  --mc-shadow: #a7a492;
+  --mc-backdrop: #24281eb3;
+  color-scheme: light;
+}
+:root[data-workbench-shell="true"][data-workbench-theme="dark"] {
+  --mc-surface: #20231e;
+  --mc-raised: #2c3028;
+  --mc-nav: #292c26;
+  --mc-ink: #e6e6d5;
+  --mc-muted: #b2b5a4;
+  --mc-line: #656b59;
+  --mc-line-soft: #3e4437;
+  --mc-accent: #afd277;
+  --mc-active: #3d4d30;
+  --mc-on-accent: #202719;
+  --mc-wood: #d1ae76;
+  --mc-code: #181c16;
+  --mc-danger: #ffaca0;
+  --mc-danger-soft: #3c2420;
+  --mc-warning: #e5bd71;
+  --mc-warning-soft: #3a3020;
+  --mc-success: #acd17c;
+  --mc-highlight: #626855;
+  --mc-shadow: #151811;
+  --mc-backdrop: #0d100bcc;
+  color-scheme: dark;
+}
+/* Host themes write inline variables. Override their color contract only while
+   the Workbench shell is mounted, including content rendered through portals. */
+:root[data-workbench-shell="true"][data-workbench-theme] {
+  --dashboard-nav-surface: var(--mc-nav);
+  --dashboard-page-surface: var(--mc-surface);
+  --dashboard-page-surface-soft: var(--mc-raised);
+  --dashboard-ink: var(--mc-ink);
+  --dashboard-muted: var(--mc-muted);
+  --dashboard-line: var(--mc-line);
+  --dashboard-line-soft: var(--mc-line-soft);
+  --dashboard-accent: var(--mc-accent);
+  --dashboard-active: var(--mc-active);
+  --background: var(--mc-surface) !important;
+  --background-base: var(--mc-surface) !important;
+  --midground: var(--mc-ink) !important;
+  --midground-base: var(--mc-ink) !important;
+  --foreground: var(--mc-accent) !important;
+  --foreground-base: var(--mc-accent) !important;
+  --color-background: var(--mc-surface) !important;
+  --color-foreground: var(--mc-ink) !important;
+  --color-card: var(--mc-surface) !important;
+  --color-card-foreground: var(--mc-ink) !important;
+  --color-popover: var(--mc-raised) !important;
+  --color-popover-foreground: var(--mc-ink) !important;
+  --color-primary: var(--mc-accent) !important;
+  --color-primary-foreground: var(--mc-on-accent) !important;
+  --color-secondary: var(--mc-raised) !important;
+  --color-secondary-foreground: var(--mc-ink) !important;
+  --color-muted: var(--mc-raised) !important;
+  --color-muted-foreground: var(--mc-muted) !important;
+  --color-accent: var(--mc-active) !important;
+  --color-accent-foreground: var(--mc-ink) !important;
+  --color-border: var(--mc-line-soft) !important;
+  --color-input: var(--mc-line) !important;
+  --color-ring: var(--mc-accent) !important;
+  --color-success: var(--mc-success) !important;
+  --color-warning: var(--mc-warning) !important;
+  --color-destructive: var(--mc-danger) !important;
+  --color-destructive-foreground: var(--mc-surface) !important;
+  --theme-text: var(--mc-ink) !important;
+  --theme-muted: var(--mc-muted) !important;
+  --theme-border: var(--mc-line-soft) !important;
+  --theme-primary: var(--mc-accent) !important;
+  --theme-code-background: var(--mc-code) !important;
+  --theme-code-text: var(--mc-ink) !important;
+}
+:root[data-workbench-shell="true"] ::selection {
+  color: var(--mc-ink); background: var(--mc-active);
+}
+:root[data-workbench-shell="true"] :is(.codex-composer, .codex-session-search-dialog,
+  .codex-settings-dialog, .codex-goal-dialog, .dashboard-cron-modal) {
+  border-radius: 3px;
+  box-shadow: inset 1px 1px var(--mc-highlight), inset -1px -1px var(--mc-shadow);
+}
+:root[data-workbench-shell="true"] :is(.codex-send, .dashboard-cron-button.is-primary) {
+  border-radius: 2px;
+  box-shadow: inset 1px 1px color-mix(in srgb, var(--mc-accent) 60%, white),
+    inset -1px -1px color-mix(in srgb, var(--mc-accent) 60%, black);
+}
+:root[data-workbench-shell="true"] .ha-hero {
+  background: linear-gradient(135deg, var(--mc-raised), var(--mc-surface));
+}
+:root[data-workbench-shell="true"] .codex-tool-group {
+  color: var(--mc-muted); background: var(--mc-raised); border-color: var(--mc-line-soft);
+}
+:root[data-workbench-shell="true"] .cm-editor {
+  color: var(--mc-ink); background: var(--mc-code);
+}
+:root[data-workbench-shell="true"] .hti-terminal-host {
+  color: var(--mc-ink); background: var(--mc-code);
+}
+:root[data-workbench-shell="true"] .cm-gutters {
+  color: var(--mc-muted); background: var(--mc-raised); border-color: var(--mc-line-soft);
+}

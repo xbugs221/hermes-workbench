@@ -1,0 +1,26 @@
+name: workbench-light
+description: Workbench light — white canvas, deep teal text, cyan and orange accents
+
+colors:
+  background: "#FFFFFF"
+  ui_accent: "#008F95"
+  banner_accent: "#F28C28"
+  banner_title: "#063D40"
+  banner_text: "#123E40"
+  ui_text: "#123E40"
+  banner_dim: "#527174"
+  banner_border: "#78B6B8"
+  ui_border: "#78B6B8"
+  ui_ok: "#12866F"
+  ui_warn: "#B85F12"
+  ui_error: "#D94C4C"
+  prompt: "#008F95"
+  input_rule: "#F28C28"
+  response_border: "#008F95"
+  status_bar_bg: "#F2F7F7"
+  status_bar_text: "#123E40"
+  status_bar_good: "#12866F"
+  status_bar_warn: "#B85F12"
+  status_bar_critical: "#D94C4C"
+  session_label: "#075B5F"
+  session_border: "#78B6B8"

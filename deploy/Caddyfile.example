@@ -1,0 +1,14 @@
+# Import this snippet INSIDE a route, AFTER authentication has established Remote-User.
+# Your auth layer must replace (never trust) any client-provided Remote-User header.
+(workbench_routes) {
+    @workbench path /workbench-sidecar/* /api/plugins/workbench /api/plugins/workbench/*
+    handle @workbench {
+        reverse_proxy {$WORKBENCH_UPSTREAM} {
+            header_up -Authorization
+            header_up -X-Api-Key
+            header_up -Cookie
+            header_up X-Hermes-Proxy-Secret {$WORKBENCH_PROXY_SECRET}
+        }
+    }
+}
+# Other routes, including /dashboard-plugins/*, stay with the Hermes host.

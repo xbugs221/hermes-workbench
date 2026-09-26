@@ -1,0 +1,174 @@
+/**
+ * 文件目的：封装 Hermes Workbench 的工作区、文件树、文件读写和图片资源 API。
+ * 业务边界：只通过 Dashboard SDK 注入的认证客户端访问后端，不读取宿主私有状态。
+ */
+
+export type FetchJSON = <T>(url: string, init?: RequestInit) => Promise<T>;
+const WORKBENCH_API = '/api/plugins/workbench';
+const IMAGE_PATH_PATTERN = /\.(?:avif|bmp|gif|ico|jpe?g|png|svg|webp)$/i;
+const workspaceCache = new Map<string, Workspace>();
+
+export type Workspace = {
+  id: string;
+  name: string;
+  path: string;
+  profile: string;
+  sessionId: string;
+};
+
+export type FileEntry = {
+  name: string;
+  path: string;
+  type: 'file' | 'directory';
+  size?: number;
+};
+
+export type FileDocument = {
+  content: string;
+  version: string;
+  path: string;
+  size: number;
+};
+
+/** 对路径和身份参数编码，避免工作区路径改变请求结构。 */
+function query(value: string): string {
+  return encodeURIComponent(value);
+}
+
+/** 把后端不同版本的工作区响应归一成前端稳定形态。 */
+function normalizeWorkspace(value: any): Workspace | null {
+  const row = value?.workspace ?? value;
+  if (!row || typeof row !== 'object') return null;
+  const id = String(row.id ?? row.workspace_id ?? row.path ?? '');
+  const path = String(row.path ?? row.root ?? row.root_path ?? '');
+  if (!id && !path) return null;
+  return {
+    id: id || path,
+    name: String(row.name ?? row.label ?? path.split('/').filter(Boolean).at(-1) ?? id),
+    path,
+    profile: String(row.profile ?? ''),
+    sessionId: String(row.session_id ?? row.sessionId ?? ''),
+  };
+}
+
+/** 读取会话绑定的唯一工作区；没有绑定时返回 null。 */
+export async function loadWorkspace(
+  fetchJSON: FetchJSON,
+  profile: string,
+  sessionId: string,
+): Promise<Workspace | null> {
+  const cached = workspaceCache.get(profile);
+  if (cached) return { ...cached, profile, sessionId };
+  const response = await fetchJSON<any>(
+    `${WORKBENCH_API}/workspace?profile=${query(profile)}&session=${query(sessionId)}`,
+  );
+  const workspace = normalizeWorkspace(response);
+  if (!workspace) return null;
+  const normalized = { ...workspace, profile, sessionId: '' };
+  workspaceCache.set(profile, normalized);
+  return { ...normalized, sessionId };
+}
+
+/** Return a workspace only when it belongs to the currently selected session. */
+export function workspaceForSession(
+  workspace: Workspace | null,
+  profile: string,
+  sessionId: string,
+): Workspace | null {
+  return workspace?.profile === profile && workspace.sessionId === sessionId
+    ? workspace
+    : null;
+}
+
+/** Reuse the selected profile's single configured root when starting a fresh session. */
+export function workspaceForNewSession(
+  workspace: Workspace | null,
+  profile: string,
+): Workspace | null {
+  return workspace?.profile === profile
+    ? { ...workspace, sessionId: '' }
+    : null;
+}
+
+/** 把扁平或 children 形态的目录响应归一成当前目录的直接子项。 */
+function normalizeFiles(value: any, parentPath: string): FileEntry[] {
+  const rows = Array.isArray(value) ? value : value?.files ?? value?.entries ?? value?.children ?? [];
+  if (!Array.isArray(rows)) return [];
+  return rows.flatMap((row: any): FileEntry[] => {
+    if (typeof row === 'string') {
+      const name = row.split('/').filter(Boolean).at(-1) || row;
+      const path = parentPath && !row.includes('/') ? `${parentPath}/${row}` : row;
+      return [{ name, path, type: row.endsWith('/') ? 'directory' : 'file' }];
+    }
+    if (!row || typeof row !== 'object') return [];
+    const rawPath = String(row.path ?? row.relative_path ?? row.name ?? '');
+    if (!rawPath) return [];
+    const hasExplicitPath = row.path !== undefined || row.relative_path !== undefined;
+    const path = parentPath && !hasExplicitPath ? `${parentPath}/${rawPath}` : rawPath;
+    const rawType = String(row.type ?? row.kind ?? '');
+    const isDirectory = row.is_directory === true || row.directory === true || rawType === 'directory' || rawType === 'dir';
+    return [{
+      name: String(row.name ?? path.split('/').filter(Boolean).at(-1) ?? path),
+      path,
+      type: isDirectory ? 'directory' : 'file',
+      size: Number.isFinite(Number(row.size)) ? Number(row.size) : undefined,
+    }];
+  }).sort((left, right) => {
+    if (left.type !== right.type) return left.type === 'directory' ? -1 : 1;
+    return left.name.localeCompare(right.name);
+  });
+}
+
+/** 浏览工作区中的一个目录。 */
+export async function listFiles(
+  fetchJSON: FetchJSON,
+  path: string,
+): Promise<FileEntry[]> {
+  const response = await fetchJSON<any>(
+    `${WORKBENCH_API}/files?path=${query(path)}`,
+  );
+  return normalizeFiles(response, path);
+}
+
+/** 读取 UTF-8 文本文件；二进制响应由浏览器替换字符保护。 */
+export async function readFile(
+  fetchJSON: FetchJSON,
+  path: string,
+): Promise<FileDocument> {
+  const payload = await fetchJSON<any>(`${WORKBENCH_API}/file?path=${query(path)}`);
+  return {
+    content: String(payload?.content ?? ''),
+    version: String(payload?.version ?? ''),
+    path: String(payload?.path ?? path),
+    size: Number(payload?.size ?? 0),
+  };
+}
+
+/** 使用 PUT 保存编辑器中的完整 UTF-8 文件内容。 */
+export async function writeFile(
+  fetchJSON: FetchJSON,
+  path: string,
+  content: string,
+  version: string,
+): Promise<{ version: string }> {
+  return await fetchJSON<{ version: string }>(`${WORKBENCH_API}/file?path=${query(path)}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, version }),
+  });
+}
+
+/** 返回工作区图片资源的同源地址，交给浏览器以图片响应加载。 */
+export function getAssetUrl(path: string): string {
+  return `${WORKBENCH_API}/asset?path=${query(path)}`;
+}
+
+/** 判断文件是否应进入只读图片预览，不经过 UTF-8 文本读取流程。 */
+export function isImagePath(path: string): boolean {
+  return IMAGE_PATH_PATTERN.test(path);
+}
+
+/** 判断文件是否应提供 Markdown 预览。 */
+export function isMarkdownPath(path: string): boolean {
+  return /(?:^|\/)readme(?:\.[^/]*)?$|\.(?:md|mdown|markdown)$/i.test(path);
+}
