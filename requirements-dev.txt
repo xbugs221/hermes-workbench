@@ -7,6 +7,7 @@ annotated-types==0.8.0
 anyio==4.15.1
     # via
     #   httpx
+    #   httpx2
     #   mcp
     #   sse-starlette
     #   starlette
@@ -29,27 +30,33 @@ fastapi==0.141.1
 h11==0.16.0
     # via
     #   httpcore
+    #   httpcore2
     #   uvicorn
 httpcore==1.0.9
     # via httpx
+httpcore2==2.13.1
+    # via httpx2
 httpx==0.28.1
-    # via
-    #   -r requirements-dev.in
-    #   mcp
-httpx-sse==0.4.3
+    # via -r requirements-dev.in
+httpx2==2.13.1
     # via mcp
 idna==3.20
     # via
     #   anyio
     #   httpx
+    #   httpx2
 iniconfig==2.3.0
     # via pytest
 jsonschema==4.26.0
     # via mcp
 jsonschema-specifications==2025.9.1
     # via jsonschema
-mcp==1.30.0
+mcp==2.2.0
     # via -r requirements-dev.in
+mcp-types==2.2.0
+    # via mcp
+opentelemetry-api==1.45.0
+    # via mcp
 packaging==26.3
     # via pytest
 pluggy==1.6.0
@@ -61,19 +68,15 @@ pydantic==2.13.5
     #   -r requirements-dev.in
     #   fastapi
     #   mcp
-    #   pydantic-settings
+    #   mcp-types
 pydantic-core==2.46.5
     # via pydantic
-pydantic-settings==2.15.0
-    # via mcp
 pygments==2.21.0
     # via pytest
-pyjwt==2.15.0
+pyjwt[crypto]==2.15.0
     # via mcp
 pytest==9.1.1
     # via -r requirements-dev.in
-python-dotenv==1.2.3
-    # via pydantic-settings
 python-multipart==0.0.32
     # via
     #   -r requirements-dev.in
@@ -93,11 +96,17 @@ starlette==1.7.0
     #   fastapi
     #   mcp
     #   sse-starlette
+truststore==0.10.4
+    # via
+    #   httpcore2
+    #   httpx2
 typing-extensions==4.16.0
     # via
     #   anyio
     #   fastapi
     #   mcp
+    #   mcp-types
+    #   opentelemetry-api
     #   pydantic
     #   pydantic-core
     #   typing-inspection
@@ -106,7 +115,6 @@ typing-inspection==0.4.4
     #   fastapi
     #   mcp
     #   pydantic
-    #   pydantic-settings
 uvicorn==0.53.0
     # via
     #   -r requirements-dev.in
