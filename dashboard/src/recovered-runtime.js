@@ -1,3 +1,6 @@
+import { groupWorkspaceEntries, workspaceEntryKey, uniqueWorkspaceEntries, workspaceAbsolutePath, downloadWorkspaceFile } from './workspace-file-actions';
+import { installManagedFilesListing } from './files-listing';
+installManagedFilesListing();
 import { version as workbenchVersion } from '../../package.json';
 import { terminalTheme as dx, observeTerminalTheme } from './terminal-theme';
 import { craftingIcon } from './crafting-icons';
@@ -6531,38 +6534,9 @@ import { createProjectNavigation, PANE_DRAG_TYPE } from './project-navigation';
     );
   }
   async function tp(i, e, t = e.type) {
-    const r = _1(i, t),
-      { body: n } = w1(i);
-    if (r === "markdown")
-      (n.classList.add("hti-rich-text"),
-        (n.innerHTML = Rf(await e.text(), {
-          allowDangerousHtml: !1,
-          extensions: [jf()],
-          htmlExtensions: [Ff()],
-        })),
-        await y1(n));
-    else if (r === "image") {
-      const s = document.createElement("img");
-      ((s.src = wc(e)), (s.alt = i), n.appendChild(s));
-    } else if (r === "pdf") {
-      const s = document.createElement("iframe");
-      ((s.src = wc(e)), (s.title = i), n.appendChild(s));
-    } else if (r === "text") {
-      const s = document.createElement("pre");
-      ((s.textContent = await e.text()), n.appendChild(s));
-    } else {
-      const s = document.createElement("p");
-      s.textContent = ge(
-        "此二进制格式暂不支持直接预览，请下载后使用本地应用打开。",
-        "This binary format cannot be previewed. Download it and open it in a local application.",
-      );
-      const o = document.createElement("a");
-      ((o.href = wc(e)),
-        (o.download = i),
-        (o.textContent = ge("下载文件", "Download file")),
-        n.append(s, o));
-    }
+    return openFilePreview(i, e, t);
   }
+
   const ip = "/api/plugins/kanban";
   function k1() {
     return new URLSearchParams(window.location.search).get("board") || "";
@@ -6728,7 +6702,7 @@ import { createProjectNavigation, PANE_DRAG_TYPE } from './project-navigation';
     }
   }
   function I1() {
-    sp() && (R1(), D1());
+    sp() && D1();
   }
   function N1() {
     if (window.__HERMES_WORKBENCH_FILES_PREVIEW__) return;
@@ -49116,7 +49090,7 @@ WARNING: This link could potentially be dangerous`)
   }
   async function t_(i, e) {
     const t = await i(`${Ro}/files?path=${_s(e)}`);
-    return OR(t, e);
+    return uniqueWorkspaceEntries(OR(t, e));
   }
   async function gR(i, e) {
     const t = await i(`${Ro}/file?path=${_s(e)}`);
@@ -53391,7 +53365,7 @@ WARNING: This link could potentially be dangerous`)
               ...O.map((C) =>
                 C.type === "directory"
                   ? pe(t, u, {
-                      key: C.path,
+                      key: workspaceEntryKey(C),
                       entry: C,
                       workspaceId: d,
                       fetchJSON: f,
@@ -53401,7 +53375,7 @@ WARNING: This link could potentially be dangerous`)
                   : pe(
                       t,
                       "li",
-                      { key: C.path },
+                      { key: workspaceEntryKey(C) },
                       pe(
                         t,
                         "button",
@@ -53506,7 +53480,7 @@ WARNING: This link could potentially be dangerous`)
               if (j.current !== z) return;
               if (/415|binary|UTF-8/i.test(String(G))) {
                 try {
-                  const file = await readManagedFile(Z.path);
+                  const file = await readManagedFile(workspaceAbsolutePath(d.path, Z.path));
                   if (j.current !== z) return;
                   g("");
                   await openFilePreview(file.name, file.blob, file.mime);
@@ -53590,6 +53564,21 @@ WARNING: This link could potentially be dangerous`)
               t,
               "div",
               { className: "hti-codex-file-modal-actions" },
+              pe(t, "button", {
+                type: "button", className: "hti-workspace-download",
+                onClick: async () => {
+                  M("正在下载…");
+                  try { await downloadWorkspaceFile(d.path, O); M("已开始下载"); }
+                  catch (error) { M(`下载失败：${String(error)}`); }
+                },
+              }, "下载文件"),
+              pe(t, "button", {
+                type: "button", className: "hti-workspace-copy-path",
+                onClick: async () => {
+                  try { await navigator.clipboard.writeText(workspaceAbsolutePath(d.path, O)); M("路径已复制"); }
+                  catch (error) { M(`复制失败：${String(error)}`); }
+                },
+              }, "复制路径"),
               Lo(O)
                 ? pe(
                     t,
@@ -53698,6 +53687,38 @@ WARNING: This link could potentially be dangerous`)
           pe(t, "strong", null, l.unbound),
           pe(t, "span", null, l.bind),
         );
+      const { common, other } = groupWorkspaceEntries(p, d.path);
+      const renderRootEntry = (Z) => Z.type === "directory"
+                ? pe(t, u, {
+                    key: workspaceEntryKey(Z),
+                    entry: Z,
+                    workspaceId: d.id,
+                    fetchJSON: f,
+                    copy: l,
+                    onOpen: N,
+                  })
+                : pe(
+                    t,
+                    "li",
+                    { key: workspaceEntryKey(Z) },
+                    pe(
+                      t,
+                      "button",
+                      {
+                        type: "button",
+                        className: `hti-tree-row${Z.path === O ? " is-active" : ""}`,
+                        onClick: (V) => N(Z, V.currentTarget),
+                        title: Z.path,
+                      },
+                      pe(
+                        t,
+                        "span",
+                        { className: "hti-file-icon", "aria-hidden": !0 },
+                        bd(t, Z),
+                      ),
+                      pe(t, "span", null, Z.name),
+                    ),
+                  );
       const $ =
         b === "modal"
           ? pe(
@@ -53748,39 +53769,13 @@ WARNING: This link could potentially be dangerous`)
             D && p.length === 0
               ? pe(t, "li", { className: "hti-tree-loading" }, l.loading)
               : null,
-            ...p.map((Z) =>
-              Z.type === "directory"
-                ? pe(t, u, {
-                    key: Z.path,
-                    entry: Z,
-                    workspaceId: d.id,
-                    fetchJSON: f,
-                    copy: l,
-                    onOpen: N,
-                  })
-                : pe(
-                    t,
-                    "li",
-                    { key: Z.path },
-                    pe(
-                      t,
-                      "button",
-                      {
-                        type: "button",
-                        className: `hti-tree-row${Z.path === O ? " is-active" : ""}`,
-                        onClick: (V) => N(Z, V.currentTarget),
-                        title: Z.path,
-                      },
-                      pe(
-                        t,
-                        "span",
-                        { className: "hti-file-icon", "aria-hidden": !0 },
-                        bd(t, Z),
-                      ),
-                      pe(t, "span", null, Z.name),
-                    ),
-                  ),
-            ),
+            ...common.map(renderRootEntry),
+            other.length ? pe(t, "li", { key: "other-entries", className: "hti-tree-other" },
+              pe(t, "details", null,
+                pe(t, "summary", null, `其他目录与文件（${other.length}）`),
+                pe(t, "ul", { className: "hti-tree-children" }, ...other.map(renderRootEntry)),
+              ),
+            ) : null,
           ),
         ),
         b === "modal"
@@ -53809,6 +53804,21 @@ WARNING: This link could potentially be dangerous`)
                         t,
                         "div",
                         { className: "hti-editor-actions" },
+              pe(t, "button", {
+                type: "button", className: "hti-workspace-download",
+                onClick: async () => {
+                  M("正在下载…");
+                  try { await downloadWorkspaceFile(d.path, O); M("已开始下载"); }
+                  catch (error) { M(`下载失败：${String(error)}`); }
+                },
+              }, "下载文件"),
+              pe(t, "button", {
+                type: "button", className: "hti-workspace-copy-path",
+                onClick: async () => {
+                  try { await navigator.clipboard.writeText(workspaceAbsolutePath(d.path, O)); M("路径已复制"); }
+                  catch (error) { M(`复制失败：${String(error)}`); }
+                },
+              }, "复制路径"),
                         Lo(O)
                           ? pe(
                               t,

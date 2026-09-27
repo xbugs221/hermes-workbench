@@ -39,3 +39,27 @@ def test_explicit_pool_seeds_only_this_instance(home, monkeypatch):
     assert json.loads((home / 'auth.json').read_text()) == content['providers']['openai-codex']
     assert (home / 'auth.json').stat().st_mode & 0o777 == 0o600
     assert json.loads(source.read_text()) == content
+
+def test_shared_file_link_survives_seed_and_preserves_group_mode(home, monkeypatch):
+    shared = home / 'shared.json'
+    shared.write_text('{"tokens":{"access_token":"test"}}')
+    shared.chmod(0o660)
+    (home / 'auth.json').symlink_to(shared)
+    monkeypatch.setenv('HERMES_WORKBENCH_CODEX_AUTH_FILE', str(shared))
+    runtime.seed_codex_credentials()
+    assert (home / 'auth.json').is_symlink()
+    assert shared.stat().st_mode & 0o777 == 0o660
+
+def test_shared_mode_refuses_local_credential_fork(home, monkeypatch):
+    shared = home / 'shared.json'
+    shared.write_text('{"tokens":{}}')
+    (home / 'auth.json').write_text('{"private":true}')
+    monkeypatch.setenv('HERMES_WORKBENCH_CODEX_AUTH_FILE', str(shared))
+    with pytest.raises(RuntimeError, match='Install the shared Codex auth link'):
+        runtime.seed_codex_credentials()
+    assert json.loads((home / 'auth.json').read_text()) == {'private': True}
+
+def test_shared_mode_never_falls_back_when_authority_missing(home, monkeypatch):
+    monkeypatch.setenv('HERMES_WORKBENCH_CODEX_AUTH_FILE', str(home / 'missing.json'))
+    with pytest.raises(RuntimeError, match='Shared Codex authentication file is unavailable'):
+        runtime.seed_codex_credentials()

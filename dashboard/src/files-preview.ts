@@ -118,7 +118,6 @@ function decorateVisibleFiles(root: ParentNode = document): void {
 
 function refreshFilesPreview(): void {
   if (!isFilesRoute()) return;
-  removeRowsBeforeParent();
   decorateVisibleFiles();
 }
 

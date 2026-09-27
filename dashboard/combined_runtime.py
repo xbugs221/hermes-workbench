@@ -39,6 +39,16 @@ def seed_codex_credentials() -> None:
         os.chown(token_path, uid, gid)
 
     auth_path = Path(os.environ["CODEX_HOME"]) / "auth.json"
+    shared_file = os.environ.get("HERMES_WORKBENCH_CODEX_AUTH_FILE", "").strip()
+    if shared_file:
+        shared_path = Path(shared_file)
+        if not shared_path.is_file():
+            raise RuntimeError("Shared Codex authentication file is unavailable")
+        if not (auth_path.is_symlink() and auth_path.resolve() == shared_path.resolve()):
+            if auth_path.exists() or auth_path.is_symlink():
+                raise RuntimeError("Install the shared Codex auth link before starting the service")
+            auth_path.symlink_to(shared_path)
+        return
     if not auth_path.exists():
         source = os.environ.get("HERMES_WORKBENCH_CODEX_AUTH_SOURCE")
         if not source:

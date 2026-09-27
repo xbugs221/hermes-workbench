@@ -144,6 +144,14 @@ export async function openFilePreview(filename: string, blob: Blob, contentType 
   const kind = filePreviewKind(filename, contentType);
   const body = existingBody || previewShell(filename).body;
   body.replaceChildren();
+  const header = body.closest('.hti-file-preview-panel')?.querySelector('header');
+  header?.querySelector('a[download]')?.remove();
+  const download = document.createElement('a');
+  download.href = objectUrl(blob);
+  download.download = filename;
+  download.textContent = uiText('下载文件', 'Download file');
+  download.className = 'hti-file-preview-download';
+  header?.insertBefore(download, header.lastElementChild);
   if (kind === 'markdown') {
     body.classList.add('hti-rich-text');
     body.innerHTML = micromark(await blob.text(), {
@@ -178,10 +186,6 @@ export async function openFilePreview(filename: string, blob: Blob, contentType 
       `此格式显示二进制预览（前 ${bytes.length} 字节，共 ${blob.size} 字节）；可下载完整文件。`,
       `Binary preview (first ${bytes.length} of ${blob.size} bytes). Download for the complete file.`,
     );
-    const link = document.createElement('a');
-    link.href = objectUrl(blob);
-    link.download = filename;
-    link.textContent = uiText('下载文件', 'Download file');
-    body.append(note, pre, link);
+    body.append(note, pre);
   }
 }

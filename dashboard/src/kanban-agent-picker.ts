@@ -29,6 +29,7 @@ export async function loadKanbanProfiles(fetchJSON: FetchJSON, url: string): Pro
 export async function populateKanbanAgentSelect(
   select: HTMLSelectElement, actions: HTMLButtonElement[], host: HTMLElement,
   load: () => Promise<string[]>,
+  preferred?: () => Promise<string>,
 ): Promise<void> {
   const status = document.createElement('div');
   status.className = 'hti-kanban-agent-status';
@@ -48,14 +49,16 @@ export async function populateKanbanAgentSelect(
     pending.textContent = '加载中…'; pending.value = '';
     select.replaceChildren(pending);
     try {
-      const names = await load();
+      const [names, initial] = await Promise.all([load(), preferred ? preferred() : Promise.resolve(previous)]);
+      const chosen = select.dataset.userSelected ? previous : initial;
+      if (chosen && !names.includes(chosen)) throw new Error(`Configured agent is unavailable: ${chosen}`);
       select.replaceChildren(...names.map(name => {
         const option = document.createElement('option');
         option.value = name;
         option.textContent = agentDisplayName(name);
         return option;
       }));
-      select.value = names.includes(previous) ? previous : names.includes('default') ? 'default' : names[0];
+      select.value = chosen || (names.includes('default') ? 'default' : names[0]);
       select.disabled = false;
       actions.forEach(button => { button.disabled = false; });
       status.hidden = true;

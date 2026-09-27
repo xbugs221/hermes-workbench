@@ -11,7 +11,7 @@ import time
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('source', type=Path, help='Dashboard directory containing manifest.json and dist/')
-parser.add_argument('--target', type=Path, default=Path(os.environ.get('HERMES_WORKBENCH_PLUGIN_ROOT', '/opt/data/plugins/workbench')) / 'dashboard')
+parser.add_argument('--target', type=Path, default=Path(os.environ.get('HERMES_WORKBENCH_PLUGIN_ROOT', '/opt/data/plugins/dist/workbench')) / 'dashboard')
 parser.add_argument('--backup-root', type=Path, default=Path(os.environ.get('HERMES_WORKBENCH_HERMES_HOME', '/opt/data')) / 'state/workbench-dev-publish')
 args = parser.parse_args()
 target = args.target

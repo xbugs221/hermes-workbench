@@ -22,7 +22,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 from release_runtime import ReleaseStore, PENDING, write_json
 
-PLUGIN_ROOT = Path(os.environ.get('HERMES_WORKBENCH_PLUGIN_ROOT', '/opt/data/plugins/workbench'))
+PLUGIN_ROOT = Path(os.environ.get('HERMES_WORKBENCH_PLUGIN_ROOT', '/opt/data/plugins/dist/workbench'))
 DIST = PLUGIN_ROOT / 'dashboard/dist'
 MANIFEST = PLUGIN_ROOT / 'dashboard/manifest.json'
 RELEASES = PLUGIN_ROOT / 'dashboard/releases'

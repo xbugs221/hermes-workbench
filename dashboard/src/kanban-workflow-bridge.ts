@@ -115,7 +115,10 @@ function installDrawerExecutionControl(drawer: HTMLElement, actions: HTMLElement
   const drawerBody = drawer.querySelector('.hermes-kanban-drawer-body');
   drawerBody?.insertBefore(control, drawerBody.firstChild);
 
-  void populateKanbanAgentSelect(agentSelect, [conversationButton, assignButton], control, installedProfiles);
+  void populateKanbanAgentSelect(agentSelect, [conversationButton, assignButton], control, installedProfiles, async () => {
+    const data = await fetchJson<{ task: { assignee?: string }; board_default_assignee?: string }>(api(`/tasks/${encodeURIComponent(taskId)}`));
+    return data.task.assignee || data.board_default_assignee || 'default';
+  });
 }
 
 const PRIMARY_SECTION_LABELS: Array<{ matches: string[]; label: string; classNames: string[] }> = [

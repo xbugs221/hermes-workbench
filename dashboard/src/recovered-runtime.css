@@ -7065,6 +7065,8 @@ dialog.hti-codex-file-modal a:focus-visible {
 }
 .hti-codex-file-modal-tabs button,
 .hti-codex-file-modal-save,
+.hti-workspace-download,
+.hti-workspace-copy-path,
 .hti-codex-file-modal-close {
   min-height: 2.35rem;
   border: 1px solid var(--mc-line-soft, #d8e4f1);
@@ -10114,3 +10116,30 @@ html.dark .hti-rich-text {
 .workbench-version-notes > div { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.7; padding-top: 12px; color: var(--dashboard-muted); }
 .workbench-version-row button:disabled { opacity: .6; cursor: wait; }
 @media (max-width: 600px) { [data-workbench-version-panel] { padding: 16px 12px; } }
+
+.hti-file-preview-download {
+  margin-left: auto;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border, #cbd5e1);
+  border-radius: .3rem;
+  padding: .28rem .5rem;
+  color: inherit;
+  text-decoration: none;
+}
+.hti-file-preview-panel > header button { flex-shrink: 0; }
+
+@media (max-width: 640px) {
+  .hti-codex-file-modal-header { flex-direction: column; align-items: stretch; }
+  .hti-codex-file-modal-actions { justify-content: flex-start; }
+}
+
+.hti-tree-other > details > summary {
+  padding: .7rem .55rem;
+  cursor: pointer;
+  color: var(--mc-muted, #7180a2);
+  font-size: .88rem;
+  border-top: 1px solid var(--mc-line-soft, #d8e4f1);
+  margin-top: .35rem;
+}
+.hti-tree-other > details > summary:focus-visible { outline: 2px solid var(--mc-accent, #078791); }
+.hti-tree-other > details > .hti-tree-children { margin-left: 0; }
