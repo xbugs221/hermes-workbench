@@ -4,5 +4,5 @@ pydantic
 httpx
 python-multipart
 websockets
-mcp<2
+mcp<3
 uvicorn
