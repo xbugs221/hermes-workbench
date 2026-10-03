@@ -24,7 +24,7 @@ click==8.5.0
     # via uvicorn
 cryptography==50.0.1
     # via pyjwt
-fastapi==0.141.1
+fastapi==0.142.2
     # via -r requirements-dev.in
 h11==0.16.0
     # via
@@ -50,6 +50,8 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 mcp==1.30.0
     # via -r requirements-dev.in
+opentelemetry-api==1.45.0
+    # via fastapi
 packaging==26.3
     # via pytest
 pluggy==1.6.0
@@ -68,7 +70,7 @@ pydantic-settings==2.15.0
     # via mcp
 pygments==2.21.0
     # via pytest
-pyjwt==2.15.0
+pyjwt[crypto]==2.15.0
     # via mcp
 pytest==9.1.1
     # via -r requirements-dev.in
@@ -98,6 +100,7 @@ typing-extensions==4.16.0
     #   anyio
     #   fastapi
     #   mcp
+    #   opentelemetry-api
     #   pydantic
     #   pydantic-core
     #   typing-inspection
